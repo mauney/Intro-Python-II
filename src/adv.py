@@ -85,8 +85,8 @@ while True:
         elif new_room is None:
             print('Travel in that direction is not possible.\n')
         else:
-            print(f'type of return: {type(new_room)}')
-            print(f'actual return: {new_room}')
+            print("Unexpected error. Please debug.")
+            break
     elif cmd == 'q':
         print(f'Thank for for playing, {player.name}! Come back any time.')
         break
