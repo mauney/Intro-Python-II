@@ -1,4 +1,6 @@
+from player import Player
 from room import Room
+from textwrap import fill
 
 # Declare all the rooms
 
@@ -38,6 +40,10 @@ room['treasure'].s_to = room['narrow']
 #
 
 # Make a new player object that is currently in the 'outside' room.
+print('Welcome to your adventure!')
+player_name = input('What is your name?\n')
+player = Player(player_name, room['outside'])
+print(f'Greetings, {player.name}!\n')
 
 # Write a loop that:
 #
@@ -49,3 +55,41 @@ room['treasure'].s_to = room['narrow']
 # Print an error message if the movement isn't allowed.
 #
 # If the user enters "q", quit the game.
+
+instructions = """Enter 'n' for north, 'e' for east, 's' for south, or 'w' for west.
+Enter 'q' to abandon your adventure.
+"""
+
+print(instructions)
+
+def navigate(direction):
+    if direction == 'n':
+        new_room = player.current_room.n_to
+    elif direction == 'e':
+        new_room = player.current_room.e_to
+    elif direction == 's':
+        new_room = player.current_room.s_to
+    elif direction == 'w':
+        new_room = player.current_room.w_to
+    return new_room
+
+
+while True:
+    print(player.current_room.name)
+    print(player.current_room.description)
+    cmd = input('Which direction shall you travel?\n').lower()
+    if cmd in ['n', 'e', 's', 'w']:
+        new_room = navigate(cmd)
+        if isinstance(new_room, Room):
+            player.current_room = new_room
+        elif new_room is None:
+            print('Travel in that direction is not possible.\n')
+        else:
+            print(f'type of return: {type(new_room)}')
+            print(f'actual return: {new_room}')
+    elif cmd == 'q':
+        print(f'Thank for for playing, {player.name}! Come back any time.')
+        break
+    else:
+        print("I'm sorry, you command was not understood\n")
+        print(instructions)
