@@ -24,7 +24,6 @@ chamber! Sadly, it has already been completely emptied by
 earlier adventurers. The only exit is to the south."""),
 }
 
-
 # Link rooms together
 
 room['outside'].n_to = room['foyer']
@@ -35,6 +34,20 @@ room['overlook'].s_to = room['foyer']
 room['narrow'].w_to = room['foyer']
 room['narrow'].n_to = room['treasure']
 room['treasure'].s_to = room['narrow']
+
+# Create some items
+
+items = {
+    'shovel': Item('shovel',
+                   'a garden shovel'),
+    'marble': Item('marble',
+                   'a blue marble')
+}
+
+# Place the items in the foyer
+room['foyer'].add_item(items['shovel'])
+room['foyer'].add_item(items['marble'])
+
 
 #
 # Main
@@ -57,40 +70,29 @@ print(f'Greetings, {player.name}!\n')
 #
 # If the user enters "q", quit the game.
 
-instructions = """Enter 'n' for north, 'e' for east, 's' for south, or 'w' for west.
-Enter 'q' to abandon your adventure.
+instructions = """Enter one of the following commands:
+n to move north, e to move east, s to move south, or w to move west
+d to describe your current location
+i to see items in the room
+c to see this list of commands
+q to abandon your adventure
 """
 
 print(instructions)
 
-def navigate(direction):
-    if direction == 'n':
-        new_room = player.current_room.n_to
-    elif direction == 'e':
-        new_room = player.current_room.e_to
-    elif direction == 's':
-        new_room = player.current_room.s_to
-    elif direction == 'w':
-        new_room = player.current_room.w_to
-    return new_room
-
-
 while True:
-    print(player.current_room.name)
-    print(player.current_room.description)
-    cmd = input('Which direction shall you travel?\n').lower()
+    cmd = input('~~>').lower()
     if cmd in ['n', 'e', 's', 'w']:
-        new_room = navigate(cmd)
-        if isinstance(new_room, Room):
-            player.current_room = new_room
-        elif new_room is None:
-            print('Travel in that direction is not possible.\n')
-        else:
-            print("Unexpected error. Please debug.")
-            break
+        player.move(cmd)
+    elif cmd == 'i':
+        print(player.current_room.list_items(player))
+    elif cmd == 'd':
+        print(player.current_room.description)
+    elif cmd == 'c':
+        print(instructions)
     elif cmd == 'q':
         print(f'Thank for for playing, {player.name}! Come back any time.')
-        break
+        exit()
     else:
         print("I'm sorry, you command was not understood\n")
         print(instructions)

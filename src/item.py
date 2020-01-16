@@ -3,6 +3,6 @@
 
 class Item:
     
-    def __init__(self, name, current_room):
+    def __init__(self, name, description):
         self.name = name
-        self.current_room = current_room
+        self.description = description
