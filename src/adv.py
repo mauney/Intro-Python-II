@@ -73,26 +73,43 @@ print(f'Greetings, {player.name}!\n')
 instructions = """Enter one of the following commands:
 n to move north, e to move east, s to move south, or w to move west
 d to describe your current location
-i to see items in the room
+i to list your inventory
+r to view items in the room
 c to see this list of commands
 q to abandon your adventure
 """
 
 print(instructions)
 
+def unknown_command():
+    print("I'm sorry, you command was not understood\n")
+    print(instructions)
+
 while True:
-    cmd = input('~~>').lower()
-    if cmd in ['n', 'e', 's', 'w']:
-        player.move(cmd)
-    elif cmd == 'i':
-        print(player.current_room.list_items(player))
-    elif cmd == 'd':
-        print(player.current_room.description)
-    elif cmd == 'c':
-        print(instructions)
-    elif cmd == 'q':
-        print(f'Thank for for playing, {player.name}! Come back any time.')
-        exit()
+    cmd = input('~~>').lower().split()
+    if len(cmd) == 1:
+        cmd = cmd[0]
+        if cmd in ['n', 'e', 's', 'w']:
+            player.move(cmd)
+        elif cmd == 'i' or cmd == 'inventory':
+            print(player.list_inventory ())
+        elif cmd == 'r':
+            print(player.current_room.list_items())
+        elif cmd == 'd':
+            print(player.current_room.description)
+        elif cmd == 'c':
+            print(instructions)
+        elif cmd == 'q':
+            print(f'Thank for for playing, {player.name}! Come back any time.')
+            exit()
+        else:
+            unknown_command()
+    elif len(cmd) == 2:
+        if cmd[0] == 'get' or cmd[0] == 'take':
+            player.pickup_item(cmd[1])
+        elif cmd[0] == 'drop' or cmd[0] == 'leave':
+            player.drop_item(cmd[1])
+        else:
+            unknown_command()
     else:
-        print("I'm sorry, you command was not understood\n")
-        print(instructions)
+        unknown_command()

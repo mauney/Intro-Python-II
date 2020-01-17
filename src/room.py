@@ -30,10 +30,11 @@ class Room:
         self.items.append(item)
 
     # return items currently in room
-    def list_items(self, player):
+    def list_items(self):
         if len(self.items) == 0:
             return 'There are no items in this room.\n'
-        item_str = f'{player.current_room.name} contains\n'
+
+        item_str = f'{self.name} contains\n'
         for item in self.items:
             item_str += item.name + ', ' + item.description + ';\n'
         return item_str
